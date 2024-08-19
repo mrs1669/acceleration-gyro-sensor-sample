@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F51A2642C6CD1ED00979949 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F51A2632C6CD1ED00979949 /* MotionManager.swift */; };
 		4FC9E1ED2BF1049B00F630AB /* IOSTemplateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC9E1EC2BF1049B00F630AB /* IOSTemplateApp.swift */; };
 		4FC9E1EF2BF1049B00F630AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC9E1EE2BF1049B00F630AB /* ContentView.swift */; };
 		4FC9E1F12BF1049C00F630AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FC9E1F02BF1049C00F630AB /* Assets.xcassets */; };
@@ -14,6 +15,7 @@
 		4FC9E1FE2BF1049C00F630AB /* IOSTemplateAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC9E1FD2BF1049C00F630AB /* IOSTemplateAppTests.swift */; };
 		4FC9E2082BF1049C00F630AB /* IOSTemplateAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC9E2072BF1049C00F630AB /* IOSTemplateAppUITests.swift */; };
 		4FC9E20A2BF1049C00F630AB /* IOSTemplateAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC9E2092BF1049C00F630AB /* IOSTemplateAppUITestsLaunchTests.swift */; };
+		4FDB66FE2C72352B00C37B49 /* MotionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDB66FD2C72352B00C37B49 /* MotionData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F51A2632C6CD1ED00979949 /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		4FC9E1E92BF1049B00F630AB /* IOSTemplateApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IOSTemplateApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FC9E1EC2BF1049B00F630AB /* IOSTemplateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSTemplateApp.swift; sourceTree = "<group>"; };
 		4FC9E1EE2BF1049B00F630AB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,6 +48,7 @@
 		4FC9E2072BF1049C00F630AB /* IOSTemplateAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSTemplateAppUITests.swift; sourceTree = "<group>"; };
 		4FC9E2092BF1049C00F630AB /* IOSTemplateAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSTemplateAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		4FC9E2162BF1334B00F630AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4FDB66FD2C72352B00C37B49 /* MotionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +101,8 @@
 			children = (
 				4FC9E1EC2BF1049B00F630AB /* IOSTemplateApp.swift */,
 				4FC9E1EE2BF1049B00F630AB /* ContentView.swift */,
+				4F51A2632C6CD1ED00979949 /* MotionManager.swift */,
+				4FDB66FD2C72352B00C37B49 /* MotionData.swift */,
 				4FC9E1F02BF1049C00F630AB /* Assets.xcassets */,
 				4FC9E2162BF1334B00F630AB /* Info.plist */,
 				4FC9E1F22BF1049C00F630AB /* Preview Content */,
@@ -264,7 +270,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FC9E1EF2BF1049B00F630AB /* ContentView.swift in Sources */,
+				4F51A2642C6CD1ED00979949 /* MotionManager.swift in Sources */,
 				4FC9E1ED2BF1049B00F630AB /* IOSTemplateApp.swift in Sources */,
+				4FDB66FE2C72352B00C37B49 /* MotionData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
