@@ -41,7 +41,7 @@ struct ContentView: View {
             }
 
             Spacer()
-            
+
             Button(action: {
                 if let csvURL = motionManager.exportCSV() {
                     shareCSV(url: csvURL)

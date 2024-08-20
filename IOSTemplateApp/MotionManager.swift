@@ -35,7 +35,7 @@ class MotionManager: ObservableObject {
     @Published var distance: Double = 0.0
 
     private var motionData: [MotionData] = []
-    private var initialTimestamp: Int64?
+    private var previousTimestamp: Int64?
 
     init() {
         startDeviceMotionUpdates()
@@ -56,19 +56,20 @@ class MotionManager: ObservableObject {
         // タイムスタンプをマイクロ秒単位で取得
         let timestamp = Int64(Date().timeIntervalSince1970 * 1_000_000)
 
-        // duration を計算（最初のタイムスタンプとの差分）
+        // duration を計算（一つ前のタイムスタンプとの差分）
         let duration: Double
-        if let initialTimestamp = initialTimestamp {
-            duration = Double(timestamp - initialTimestamp) / 1_000_000.0 // マイクロ秒を秒に変換
+        if let previousTimestamp = previousTimestamp {
+            duration = Double(timestamp - previousTimestamp) / 1_000_000.0 // マイクロ秒を秒に変換
         } else {
-            initialTimestamp = timestamp
             duration = 0.0
         }
+        previousTimestamp = timestamp
 
         // ローカルフレームの加速度
-        let accX = data.userAcceleration.x
-        let accY = data.userAcceleration.y
-        let accZ = data.userAcceleration.z
+        // 1.0(G) => 9.8m/s^2
+        let accX = data.userAcceleration.x * 9.80665
+        let accY = data.userAcceleration.y * 9.80665
+        let accZ = data.userAcceleration.z * 9.80665
 
         // ローカルフレームの加速度をワールドフレームに変換
         let rotationMatrix = data.attitude.rotationMatrix
