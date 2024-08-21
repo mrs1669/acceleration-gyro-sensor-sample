@@ -33,10 +33,26 @@ class MotionManager: ObservableObject {
 
     // 原点からの距離
     @Published var distance: Double = 0.0
+    
+    // 補正値
+    @Published var zeroGCalibration: (x: Double, y: Double, z: Double)?
+
+    // 補正用変数
+    private var zeroGCalibrationX: Double = 0.0
+    private var zeroGCalibrationY: Double = 0.0
+    private var zeroGCalibrationZ: Double = 0.0
+    private var calibrationDataCount = 0
+    private var numberOfcalibrationData = 1000
+
+    // 加速度を保存するリスト
+    private var initialAccelerationData: [(Double, Double, Double)] = []
+
+    // 計測フラグ
+    private var isCalibrating = true
 
     private var motionData: [MotionData] = []
     private var previousTimestamp: Int64?
-    
+
     func startUpdates() {
         startDeviceMotionUpdates()
     }
@@ -87,11 +103,31 @@ class MotionManager: ObservableObject {
         let accY = data.userAcceleration.y * 9.80665
         let accZ = data.userAcceleration.z * 9.80665
 
+        if isCalibrating {
+            // 最初の500データを保存
+            if calibrationDataCount < numberOfcalibrationData {
+                initialAccelerationData.append((accX, accY, accZ))
+                calibrationDataCount += 1
+
+                if calibrationDataCount == numberOfcalibrationData {
+                    calculateZeroGOffset()
+                }
+                return
+            }
+        }
+
+        // 補正適用 (501データ目以降)
+        let correctedAccX = accX - zeroGCalibrationX
+        let correctedAccY = accY - zeroGCalibrationY
+        let correctedAccZ = accZ - zeroGCalibrationZ
+
         // ローカルフレームの加速度をワールドフレームに変換
         let rotationMatrix = data.attitude.rotationMatrix
-        let worldAccX = rotationMatrix.m11 * accX + rotationMatrix.m12 * accY + rotationMatrix.m13 * accZ
-        let worldAccY = rotationMatrix.m21 * accX + rotationMatrix.m22 * accY + rotationMatrix.m23 * accZ
-        let worldAccZ = rotationMatrix.m31 * accX + rotationMatrix.m32 * accY + rotationMatrix.m33 * accZ
+        let worldAccX = rotationMatrix.m11 * correctedAccX + rotationMatrix.m12 * correctedAccY + rotationMatrix.m13 * correctedAccZ
+        let worldAccY = rotationMatrix.m21 * correctedAccX + rotationMatrix.m22 * correctedAccY + rotationMatrix.m23 * correctedAccZ
+        let worldAccZ = rotationMatrix.m31 * correctedAccX + rotationMatrix.m32 * correctedAccY + rotationMatrix.m33 * correctedAccZ
+        
+        print(rotationMatrix)
 
         // 前の速度と積分して新しい速度を計算
         velocityX += worldAccX * duration
@@ -137,6 +173,21 @@ class MotionManager: ObservableObject {
             distance: distance
         )
         motionData.append(dataPoint)
+    }
+
+    // 0G誤差補正用の計算
+    private func calculateZeroGOffset() {
+        let sumX = initialAccelerationData.map { $0.0 }.reduce(0, +)
+        let sumY = initialAccelerationData.map { $0.1 }.reduce(0, +)
+        let sumZ = initialAccelerationData.map { $0.2 }.reduce(0, +)
+
+        zeroGCalibrationX = sumX / Double(initialAccelerationData.count)
+        zeroGCalibrationY = sumY / Double(initialAccelerationData.count)
+        zeroGCalibrationZ = sumZ / Double(initialAccelerationData.count)
+
+        isCalibrating = false
+
+        zeroGCalibration = (x: zeroGCalibrationX, y: zeroGCalibrationY, z: zeroGCalibrationZ)
     }
 
     func exportCSV() -> URL? {

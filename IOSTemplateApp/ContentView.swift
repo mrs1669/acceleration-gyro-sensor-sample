@@ -9,14 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var motionManager = MotionManager()
+    
+    @State private var showingAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         VStack(alignment: .center, spacing: 12) { // セクション間の間隔を調整
             cardSection(header: "Accelerometer Data") {
+
                 VStack(alignment: .leading, spacing: 4) {
                     Text("x: \(motionManager.accelerationX)")
                     Text("y: \(motionManager.accelerationY)")
                     Text("z: \(motionManager.accelerationZ)")
+
+                    if let calibration = motionManager.zeroGCalibration {
+                        VStack {
+                            Text("補正値 X: \(calibration.x, specifier: "%.8f")")
+                            Text("補正値 Y: \(calibration.y, specifier: "%.8f")")
+                            Text("補正値 Z: \(calibration.z, specifier: "%.8f")")
+                        }
+                        .foregroundStyle(.red)
+                    }
                 }
             }
 
@@ -98,7 +111,7 @@ struct ContentView: View {
                 .padding(.bottom, 4)
             content()
         }
-        .frame(width: 200)
+        .frame(width: 250)
         .padding()
         .background(Color.white)
         .cornerRadius(12)
