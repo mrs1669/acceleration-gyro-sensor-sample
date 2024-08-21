@@ -36,9 +36,25 @@ class MotionManager: ObservableObject {
 
     private var motionData: [MotionData] = []
     private var previousTimestamp: Int64?
-
-    init() {
+    
+    func startUpdates() {
         startDeviceMotionUpdates()
+    }
+
+    func resetData() {
+        // 速度や位置、距離を初期化
+        velocityX = 0.0
+        velocityY = 0.0
+        velocityZ = 0.0
+        positionX = 0.0
+        positionY = 0.0
+        positionZ = 0.0
+        distance = 0.0
+
+        // 加速度や回転行列もリセット
+        accelerationX = 0.0
+        accelerationY = 0.0
+        accelerationZ = 0.0
     }
 
     private func startDeviceMotionUpdates() {

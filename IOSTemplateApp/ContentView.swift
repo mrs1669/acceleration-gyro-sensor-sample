@@ -52,16 +52,39 @@ struct ContentView: View {
 
             Spacer()
 
-            Button(action: {
-                if let csvURL = motionManager.exportCSV() {
-                    shareCSV(url: csvURL)
+            HStack {
+                Button(action: {
+                    motionManager.startUpdates()
+                }) {
+                    Text("Start")
+                        .padding()
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                 }
-            }) {
-                Text("Export CSV")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+
+                // リセットボタン
+                Button(action: {
+                    motionManager.resetData()
+                }) {
+                    Text("Reset")
+                        .padding()
+                        .background(Color.yellow)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+
+                Button(action: {
+                    if let csvURL = motionManager.exportCSV() {
+                        shareCSV(url: csvURL)
+                    }
+                }) {
+                    Text("Export CSV")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
             }
         }
         .padding()
