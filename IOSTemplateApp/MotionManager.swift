@@ -98,13 +98,11 @@ class MotionManager: ObservableObject {
         previousTimestamp = timestamp
 
         // ローカルフレームの加速度
-        // 1.0(G) => 9.8m/s^2
         let accX = data.userAcceleration.x * 9.80665
         let accY = data.userAcceleration.y * 9.80665
         let accZ = data.userAcceleration.z * 9.80665
 
         if isCalibrating {
-            // 最初の500データを保存
             if calibrationDataCount < numberOfcalibrationData {
                 initialAccelerationData.append((accX, accY, accZ))
                 calibrationDataCount += 1
@@ -126,13 +124,23 @@ class MotionManager: ObservableObject {
         let worldAccX = rotationMatrix.m11 * correctedAccX + rotationMatrix.m12 * correctedAccY + rotationMatrix.m13 * correctedAccZ
         let worldAccY = rotationMatrix.m21 * correctedAccX + rotationMatrix.m22 * correctedAccY + rotationMatrix.m23 * correctedAccZ
         let worldAccZ = rotationMatrix.m31 * correctedAccX + rotationMatrix.m32 * correctedAccY + rotationMatrix.m33 * correctedAccZ
-        
-        print(rotationMatrix)
+
+        // ドリフト防止: 加速度が小さいときはゼロにする
+        let accelerationThreshold = 0.02 // 誤差を許容できる範囲のしきい値
+        let clippedWorldAccX = abs(worldAccX) < accelerationThreshold ? 0.0 : worldAccX
+        let clippedWorldAccY = abs(worldAccY) < accelerationThreshold ? 0.0 : worldAccY
+        let clippedWorldAccZ = abs(worldAccZ) < accelerationThreshold ? 0.0 : worldAccZ
 
         // 前の速度と積分して新しい速度を計算
-        velocityX += worldAccX * duration
-        velocityY += worldAccY * duration
-        velocityZ += worldAccZ * duration
+        velocityX += clippedWorldAccX * duration
+        velocityY += clippedWorldAccY * duration
+        velocityZ += clippedWorldAccZ * duration
+
+        // 低速での速度クリップ
+        let velocityThreshold = 0.01
+        if abs(velocityX) < velocityThreshold { velocityX = 0.0 }
+        if abs(velocityY) < velocityThreshold { velocityY = 0.0 }
+        if abs(velocityZ) < velocityThreshold { velocityZ = 0.0 }
 
         // 速度を積分して現在の位置を計算
         positionX += velocityX * duration
@@ -153,6 +161,7 @@ class MotionManager: ObservableObject {
         // タイムスタンプとともにデータを保存
         self.addMotionData(timestamp: timestamp, duration: Int64(duration * 1_000_000)) // durationをマイクロ秒に変換
     }
+
 
     private func addMotionData(timestamp: Int64, duration: Int64) {
         let dataPoint = MotionData(
