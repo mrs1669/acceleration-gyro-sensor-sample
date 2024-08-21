@@ -101,7 +101,7 @@ class MotionManager: ObservableObject {
         // タイムスタンプとともにデータを保存
         self.addMotionData(timestamp: timestamp, duration: Int64(duration * 1_000_000)) // durationをマイクロ秒に変換
     }
-    
+
     private func addMotionData(timestamp: Int64, duration: Int64) {
         let dataPoint = MotionData(
             duration: duration,
@@ -117,7 +117,8 @@ class MotionManager: ObservableObject {
             velocityZ: velocityZ,
             positionX: positionX,
             positionY: positionY,
-            positionZ: positionZ
+            positionZ: positionZ,
+            distance: distance
         )
         motionData.append(dataPoint)
     }
@@ -126,11 +127,12 @@ class MotionManager: ObservableObject {
         let fileName = "motion_data.csv"
         let path = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
 
-        var csvText = "Duration(µs),Timestamp(µs),AccelerationX,AccelerationY,AccelerationZ,RotationRateX,RotationRateY,RotationRateZ,VelocityX,VelocityY,VelocityZ,PositionX,PositionY,PositionZ\n"
+        // swiftlint:disable:next line_length
+        var csvText = "Duration(µs),Timestamp(µs),AccelerationX,AccelerationY,AccelerationZ,RotationRateX,RotationRateY,RotationRateZ,VelocityX,VelocityY,VelocityZ,PositionX,PositionY,PositionZ,Distance\n"
 
         for data in motionData {
             // swiftlint:disable:next line_length
-            let line = "\(data.duration),\(data.timestamp),\(data.accelerationX),\(data.accelerationY),\(data.accelerationZ),\(data.rotationRateX),\(data.rotationRateY),\(data.rotationRateZ),\(data.velocityX),\(data.velocityY),\(data.velocityZ),\(data.positionX),\(data.positionY),\(data.positionZ)\n"
+            let line = "\(data.duration),\(data.timestamp),\(data.accelerationX),\(data.accelerationY),\(data.accelerationZ),\(data.rotationRateX),\(data.rotationRateY),\(data.rotationRateZ),\(data.velocityX),\(data.velocityY),\(data.velocityZ),\(data.positionX),\(data.positionY),\(data.positionZ),\(data.distance)\n"
             csvText.append(line)
         }
 

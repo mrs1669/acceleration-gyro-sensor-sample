@@ -5,7 +5,6 @@
 //  Created by 村石 拓海 on 2024/08/18.
 //
 
-
 struct MotionData {
     let duration: Int64   // 最初のフレームからの経過時間（マイクロ秒）
     let timestamp: Int64  // マイクロ秒単位のタイムスタンプ
@@ -25,4 +24,6 @@ struct MotionData {
     let positionX: Double
     let positionY: Double
     let positionZ: Double
+
+    let distance: Double
 }
